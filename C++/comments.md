@@ -37,3 +37,9 @@ thread stack
 * build-in supporting thread systems: ususlly create stack by making new pages into address space; guard page at ench end of the stack to detect overruns and underruns
 
 mstsc(Microsoft Terminal Services Client)
+
+- 多态
+    - 运行时绑定
+    - 运算符重载
+    - 函数重载
+    - 模板

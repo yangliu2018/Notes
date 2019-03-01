@@ -1,0 +1,13 @@
+- .h: compile
+- .lib: link
+- .dll: run-time
+- 编译只需要.h和.cpp
+- 链接只需要.lib，不需要.dll
+- 加载只需要.dll，不需要.lib
+- 文件作用：
+    - .h: 声明函数接口
+    - .lib: 告知链接器函数在哪个动态库的哪个位置
+    - .dll: 函数可执行代码
+- 2种.lib
+    - 静态链接库(static library)
+    - 动态链接库(dll)的导入库(import library)

@@ -39,3 +39,12 @@ A类向B类发送消息，影响B类发生变化
 成员类是整体类的一部分，整体类可以控制成员类的生命周期
 
 ### 6. 实现关系(Implementation)
+
+|relationship|line|arrow|remark|
+|-|-|-|-|
+|泛化(generalization)   |实线   |空心三角   |继承非抽象类 |
+|实现(relization)   |虚线   |空心三角   |继承抽象类   |
+|聚合(aggregation)   |实线   |空心菱形   |整体由部分组成，弱依赖   |
+|组合(composition)   |实线   |实心菱形   |整体由部分组成，强依赖   |
+|关联(association)   |实线   |箭头/无   |非运行期，静态，成员变量   |
+|依赖(dependency)   |虚线   |箭头   |运行期，临时性，方法入参   |

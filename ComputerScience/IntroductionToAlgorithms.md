@@ -345,6 +345,198 @@ void bucket_sort(std::vector<double>& array)
 
 # III Data Structures
 
+## 10 Elementary Data Structures
+- the representation of dynamic sets by simple data structures that use pointers
+- stack, queue, linked list, and rooted tree
+### 10.1 Stacks and queues
+- stack: LIFO, last-in, first-out, push/pop/top
+- queue: FIFO, first-in, first-out, push/pop/front/back/(enqueue/dequeue)
+```cpp
+// std::deque, std::vector, std::list
+template<typename T, typename Container>
+class stack
+{
+public:
+    T& top() { return m_container.back(); }
+    void pop() { m_container.pop_back(); }
+    void push(const T& value) { m_container.push_back(value); }
+private:
+    Container<T> m_container;
+}
+
+// std::deque, std::list
+template<typename T, typename Container>
+class queue
+{
+public:
+    T& front() { return m_container.front(); }
+    T& back() { return m_container.back(); }
+    void pop() { m_container.pop_front(); }
+    void push(const T& value) { m_container.push_back(value); }
+private:
+    Container<T> m_container;
+}
+```
+
+### 10.2 Linked lists
+- singly linked list: key, next
+- doubly linked list: key, prev, next
+- sorted list
+- circular list
+- head, tail
+- sentinel: turn list into circular
+    - sentinel->next = head;
+    - tail->next = sentinel
+```cpp
+template <typename T>
+struct ListNode
+{
+    T value;
+    ListNode* next;
+    ListNode(T val = 0, ListNode* nex = nullptr)
+        : value(val), next(nex) {}
+}
+
+template <typename T>
+ListNode* list_search(ListNode* node, T value)
+{
+    while (node && node->value != value) node = node->next;
+    return node;
+}
+
+template <typename T>
+void list_insert(ListNode* node, T value)
+{
+    ListNode* tmp = new ListNode(value, node->next);
+    node->next = tmp;
+}
+
+template <typename T>
+void list_delete(ListNode* node) 
+{
+    if (node->next)
+    {
+        ListNode* tmp = node_next;
+        node->next = tmp->next;
+        delete tmp;
+    }
+}
+```
+
+### 10.3 Implementing pointers and objects
+- implement pointers and objects in languages that do not provite them
+- implement linked data structures without an explicit pointer data type
+- a multiple-array representation of objects
+    - three arrays: array key, array prev, array next
+    - key[index], prev[index], next[index] represent an object in the linked list
+    - array prev/next contains the index of prev/next object
+- a single-array representation of objects
+    - an object occupies a contiguous set of locations
+    - a pointer is the address of the first memory location of object
+    - permit objects of different lengths to be stored in the same array
+- garbage collector: responsible for determining which objects are unused
+    - free list
+    - several linked lists with just a single free list
+```cpp
+template<typename T>
+struct ListNode
+{
+    T value;
+    int next;
+};
+
+template <typename T, typename size>
+class ListAllocator
+{
+public:
+    ListAllocator()
+    {
+        m_free = 0;
+        for (int index = 0; index < size - 1; ++index)
+        {
+            m_array[index].next = index + 1;
+        }
+        m_array[size - 1].next = -1;
+    }
+    
+    int allocate_object()
+    {
+        if (m_free < 0) return -1;
+        int obj = m_free;
+        m_free = m_array[obj].next;
+        obj.next = -1;
+        return obj;
+    }
+    
+    void free_object(int obj)
+    {
+        m_array[obj].next = m_free;
+        m_free = obj;
+    }
+    
+    ListNode& access_object(int obj)
+    {
+        return m_array[obj];
+    }
+private:
+    int m_free;
+    std::array<ListNode<T>, size> m_array;
+};
+```
+
+### 10.4 Representing rooted trees
+- binary trees: left child, right child
+- rooted trees with unbounded branching: left-child, right-sibling representation
+- other tree representations: heap; no points to children
+
+
+## 11 Hash Tables
+- dictionary operations: insert, search, delete
+- the hash table is the generalization of the array
+- key ==> index ==> value, collision ==> chain
+
+### 11.1 Direct-address tables
+- slot
+### 11.2 Hash tables
+- the set K of keys stored in a dictionary is much smaller than the universe U of all possible keys
+- hash function: U -> {0, 1, ..., m - 1}
+- hash value
+- slot
+- size m of hash table is much typically much less than |U|
+- collision
+    - minimize the number of collisions: choose a suitable hash function
+    - resolve collisions: chaining, open addressing
+- chaining: place all elements that hash to the same slot into the same linked list
+- simple uniform hashing
+- time 
+    - insert, delete: O(1)
+    - search: O(1)~Θ(n)
+```cpp
+template <typename Key>
+size_t hash_function(const Key& key);
+
+template<typename Key, typename Val>
+class ChainHashTable
+{
+public:
+    void insert(Key key, Val val) 
+    {
+        m_table[hash_function(key)].emplace_front(key, val);
+    }
+    void delete(Key key, Val val)
+    {
+        m_table[hash_function(key)].delete(key, val);
+    }
+private:
+    std::vector<std::list<std::pair<Key, Val>>> m_table;
+}
+```
+
+### 11.3 Hash functions
+- three schemes
+    - hashing by division
+    - hashing by multiplication
+    - universal hashing
 
 # VI Advanced Design and Analysis Techniques
 - 3 important techinques used in designing and andlyzing efficient Algorithms
@@ -374,6 +566,124 @@ void bucket_sort(std::vector<double>& array)
     - recursively define the value of an optimal solution
     - compute the value of an optimal solution, typically in a bottom-up fashion
     - construct an optimal solution from computed information
+### Rod cutting
+- rod-cutting problem: given a rod of length n inches and a table of prices p_i for i = 1, 2, ..., n, determine the maximum revenue r_n obtainable by cutting up the rod and selling the pieces
+- optimal substructure: optimal solutions to a problem incorporate optimal solutions to related subproblems, which we may solve independently
+- induction
+- two equivalent ways to implement a dynamic-programming approach
+    - top-down with memorization(uaually array or hash table)
+    - bottom-up method(sort subproblems by size and solve them in size order, smallest first)
+- subproblem graphs: the set of subproblems involved and how subproblems depend on one another
+    - bottom-up dynamic-programming algorithm: reverse topological sort/topoligical sort of the transpose
+    - up-down dynamic-programming algorithm: depth-first search
+```cpp
+// recursive top-down implementation
+// O(2^n), exponential time
+// solves the same subproblems repeately
+template <typename T>
+T cut_rod(std::vector<T>& prices, unsigned length) {
+    if (length == 0) return 0;
+    int ret = INT_MIN;
+    for (unsigned i = 0; i <= length; ++i) {
+        ret = std::max(ret, p[i] + cut_rod(prices, length - i));
+    }
+    return ret;
+}
+
+// dynamic programming
+// each subproblem is solved only once
+// time-memory trade-off
+// Θ(n ^ 2), polynomial time
+template <typename T> 
+T memorized_cut_rod(std::vector<T>& prices, unsigned length) {
+    std::vector<T> cache(length + 1, std::numeric_limits<T>::lowest());
+    return memorized_cut_rod_aux(prices, length, cache);
+}
+
+template <typename T>
+T memorized_cut_rod_aux(std::vector<T>& prices, unsigned length, std::vector<T>& cache) {
+    T ret = cache[length];
+    if (ret != std::numeric_limits<T>::lowest()) return ret;
+    if (n == 0) ret = 0;
+    else {
+        for (usigned i = 0; i <= length; ++i) {
+            ret = std::max(ret, p[i] + memorized_cut_rod_aux(p, length - i, cache));
+        }
+    }
+    cache[n] = ret;
+    return ret;
+}
+
+template <typename T>
+T bottom_up_cut_rod(std::vector<T>& prices, unsigned length) {
+    std::vector<T> cache(length + 1, std::numeric_limits<T>::lowest());
+    cache[0] = 0;
+    for (unsigned i = 0; i <= length; ++i) {
+        for (unsigned j = 0; j <= i; ++j) {
+            cache[j] = std::max(cache[j], prices[i] + cache[i - j]);
+        }
+    }
+    return cache[length];
+}
+
+// return: for each subproblem, the maximum revenue and the optimal size of the first piece to cut
+template <typename T>
+std::vector<std::tuple<T, int>> 
+extended_bottom_up_cut_rod(std::vector<T>& prices, unsigned length) {
+    std::vector<std::tuple<T, int>> answers(length + 1, {std::numeric_limits<T>::lowest(), 0});
+    answers[0].first = 0;
+    for (int i = 0; i <= length; ++i) { // whole size
+        for (int j = 0; j <= i; ++j) {  // cut-off size
+            T revenue = prices[j] + answers[i - j].first;
+            if (answers[i].first < revenue) {
+                answers[i].first = revenue;
+                answers[i].second = j;
+            }
+        }
+    }
+    return answers;
+}
+
+template <typename T>
+std::vector<int> get_cut_rod_solution(std::vector<T>& prices, int n) {
+    std::vector<std::tuple<T, int>> answers = extended_bottom_up_cut_rod(p, n);
+    std::vector<int> ret;
+    while (n > 0) {
+        ret.push_back(answers[n].second);
+        n -= answers[n].second;
+    }
+    return ret;
+}
+```
+
+### Matrix-chain multiplication
+- compute the product of n matrics A1, A2, ..., An
+- matrix-chain multiplication problem: given a chain <A1, A2, ... An> of n matrics, where for i = 1, 2, ..., n, matrix Ai has dimension p_(i-1) * p_i, fully parenthesize the product A1A2...An in a way that minimizes the number of scalar multiplications
+- 
+```cpp
+template <typename T> class Matrix;
+
+// A: p*q, B: q*r, C = AB: p*r
+// time: O(pqr)
+template <typename T> 
+Matrix<T> matrix_multiply(Matrix<T>& A, Matrix<T>& B) {
+    if (A.cols != B.rows) throw "imcompatible dimensions";
+    Matrix<T> ret(A.rows, B.cols, 0);   // row num, col num, init value
+    for (int row = 0; row < ret.rows; ++row) {
+        for (int col = 0; col < ret.cols; ++col) {
+            for (int i = 0; i < A.cols; ++i) {
+                ret.at(row, col) += A.at(row, i) * A.at(i, col);
+            }
+        }
+    }
+    return ret;
+}
+```
+## 16 Greedy Algorithms
+- make a locally optimal choice in the hope that this choice will lead to a globally optimal solution
+- do not always yiled optimal solution
+- 
+
 
 
 # V Advanced Data Structures

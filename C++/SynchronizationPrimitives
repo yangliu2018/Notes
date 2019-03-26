@@ -1,0 +1,29 @@
+- atomic operations
+- mutexex
+- condition variables
+- a condition variable must need a mutex
+    - unlocking the mutex and then 
+    - waking up and then locking the mutex must be atomic
+- spurious wakeup
+    - even after a condition variable appears to have been signaled from a waiting thread's point of view, the condition that was awaited may still be false
+    - 
+- 并发编程 + 多核操作系统 ==> 并发安全性问题
+    - 对共享变量的并发读写引起的数据不一致问题
+    - 锁、队列、原子操作、单线程处理共享数据
+- 并发编程的特性
+    - 并发执行不一定并行执行
+    - 单核CPU可以并发执行，不能并行执行
+    - 单线程可以并发执行（例如事件驱动）
+- 锁的底层实现
+    - 锁内存总线，控制程序对内存的读写操作
+    - 锁缓存行，同一缓存行的读写操作，CPU内部的高速缓存保证一致性
+    - CPU查找对象，若对象在缓冲中，则锁缓存行，否则锁总线
+    - 加锁、解锁的速度是高速缓存、内存行的读写速度，效率高，效率问题在于冲突时的串行化等待时间和线程的上下文切换
+    - 缓存和一致性协议MESI
+        - modify: 
+        - exclusive: 
+        - shared: 
+        - invalid: 
+        - forward: 
+- 条件变量的本质是全局可访问的flag
+- 互斥锁保护两种资源：条件变量和线程的全局资源

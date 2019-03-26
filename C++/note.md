@@ -52,3 +52,11 @@ C++语言本身没有IO语句，由标准库(standard library)提供IO机制(ios
 
 文件重定向
 $ filename &lt;infile >outfile
+
+
+
+### auto in for-loop
+auto         => will copy the element, but a reference is more efficient
+auto&        => will only bind to modifiable lvalues
+const auto&  => will bind to anything but make it const, giving us const_iterator
+const auto&& => will bind to rvalues

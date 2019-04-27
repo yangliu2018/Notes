@@ -709,8 +709,56 @@ Matrix<T> matrix_multiply(Matrix<T>& A, Matrix<T>& B) {
 - fusion tree
 - exponential search tree
 - dynamic graph data structure
-# VI Graph Algorithms
 
+
+
+# VI Graph Algorithms
+- G = (V, E)
+    - G: graph
+    - V: vertex
+    - E: edge
+- directed/undirected graphs
+- weighted graphs, weight function
+
+## 22 Elementary Graph Algorithms
+### representations
+- adjacency-list representation
+    - an array of |V| lists for each vertices
+    - a compact way to represent sparse graphs
+    - |E| is much less than |V|^2
+- adajcency-matrix representation
+    - dense: |E| is close to |V|^2
+    - quickly get the relationship of two given vertices
+- representing attributes
+    - attributes for vertices and/or edges
+    - no one best way to store and access vertex ans edge attributes
+
+### breadth-first search
+- breadth-first tree
+- shortest path between two vertices
+- vertex states
+    - discovered
+    - discovering(frontier between discovered and undiscovered)
+    - undiscovered
+
+### depth-first search
+- backtrack
+- predecessor subgraphs
+- vertex states
+    - discovered
+    - finished(backtrack, adjacency list has been examined completely)
+    - undiscovered
+- timestamp(each vertex has two timestamps)
+    - first discovered
+    - finish and backtrack
+
+### topological sort
+- directed acyclic G = (V, E)
+- topological sort: linear ordering of all vertices such that if G containes an edge (u, v), then u apprears before v in the ordering 
+
+### strongly connected components
+
+## 23 Minimun Spanning Trees
 
 # VII Seleted Topics
 

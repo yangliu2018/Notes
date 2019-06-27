@@ -31,3 +31,16 @@ tmp1
 
 
 每个cycle都有dark，全暗真的什么都没有？
+
+
+### *args, **kwargs
+- normal argument: 实参与形参按照参数的位置匹配
+- keyword argument: 关键字为字符串，实参与形参按照关键字匹配，不要求位置一致
+- args: positional arguments，普通参数元组
+- kwargs: keyword arguments，关键字参数字典
+- *args
+    - 形参：将多个普通实参打包成一个tuple
+    - 实参：将args解开，将args的元素作为多个实参，字典解开后只有键，丢失值
+- **kwargs
+    - 形参：将多个关键字实参打包成一个dictionary
+    - 实参：将字典解开，元素的键作为实参的关键字，元素的值作为实参的值

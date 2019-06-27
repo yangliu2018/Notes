@@ -1,0 +1,11 @@
+### python string literal
+- u/U: unicode string
+    - unicode编码
+    - 英文字符通常在不同的编码下均可正常解析
+    - 中文字符必须指定所需编码，否则解码后出现乱码，建议使用utf-8编码
+- r/R: non-escape string
+    - '\n'表示两个字符'\'和'n'，不表示换行
+- b: bytes, binary string
+- python 3.x缺省字符编码为unicode
+- pyhont 2.x缺省字符编码为binary
+- change r to u: replace '/' with '//'

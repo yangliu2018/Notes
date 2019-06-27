@@ -538,6 +538,67 @@ private:
     - hashing by multiplication
     - universal hashing
 
+## 12 Binary Search Trees
+- operations: search, minimun, maximun, predecessor, successor, insert, delete
+- a binary search tree can be used as a dictionary or a priority queue
+```cpp
+template <class Key, class Value>
+struct BinarySearchTreeNode {
+    Key key;
+    Value value;
+    BinarySrearchTreeNode* left;
+    BinarySrearchTreeNode* right;
+};
+// binary-search-tree property: node->left->key <= node->key <= node->right->key
+```
+## 13 Red-Black Trees
+- 
+
+## 14 Augmenting Data Structures
+- augmented red-black tree
+    - order-statistic tree
+### Dynamic order statistics
+- order-statistic tree
+    - any order statistics in O(lg n) time from an unordered set based on red-black tree
+    - enable equal keys
+
+```cpp
+enum class Color { RED, BLACK };
+template <class Key>
+struct OrderStatisticTreeNode {
+    Key key;
+    Color color;
+    OrderStatisticTreeNode* parent;
+    OrderStatisticTreeNode* left;
+    OrderStatisticTreeNode* right;
+    size_t size;    // the number of nodes
+};
+// node->size = node->left->size + node->right->size + 1
+```
+### Interval trees
+```cpp
+emum class Color { RED, BLACK };
+template <class Value>
+struct Interval {
+    Value low;  // low endpoint
+    Value high; // high endpoint
+};
+bool operator< (const Interval& left, const Interval& right) {
+    return left.low < right.low;
+}
+template <class Key, class Value>
+struct IntervalTreeNode {
+    Key key;
+    Color color;
+    IntervalTreeNode* parent;
+    IntervalTreeNode* left;
+    IntervalTreeNode* right;
+    Interval<Value> interval;   // the interval itself
+    Value max;  // the maximum interval endpoint value in the subtree rooted at this node
+};
+// node->max = max(node->interval.high, node->left->max, node->right->max)
+```
+
 # VI Advanced Design and Analysis Techniques
 - 3 important techinques used in designing and andlyzing efficient Algorithms
     - dynamic programming
@@ -554,7 +615,7 @@ private:
 
 ## 15 Dynamic Programming
 - divide-and-conquer: solves problems by combining the solutions to subproblems
-- dynamic programming: solves problems by combining the solution to subproblems and solving each subsubproblem only once
+- dynamic programming: solves problems by combining the solution to subproblems and solving each subsubproblem only once by memorization
 - dynamic programming = divide-and-conquer + overlapping subsubproblems
 - optimization problems
     - such problems can have many possible solutions ==> find optimal solution
@@ -681,9 +742,13 @@ Matrix<T> matrix_multiply(Matrix<T>& A, Matrix<T>& B) {
 ```
 ## 16 Greedy Algorithms
 - make a locally optimal choice in the hope that this choice will lead to a globally optimal solution
-- do not always yiled optimal solution
-- 
+- do not always yield optimal solution
 
+### activity-selection problem
+- problem: schedule several competing activities that require exclusive use of a common resource
+    - goal: select a maximun-size set of mutually compatible activities
+    - each activity has start time and finish time: 0 <= s < f, half-open internal [s, f)
+    - compatible: intervals not overlap
 
 
 # V Advanced Data Structures
@@ -710,6 +775,22 @@ Matrix<T> matrix_multiply(Matrix<T>& A, Matrix<T>& B) {
 - exponential search tree
 - dynamic graph data structure
 
+## 18 B-Trees
+- B-Trees are balanced search trees designed to work well on disks or other direct-access secondary storage devices
+- amortize the time spent waiting for mechanical movements
+    - access ont just one item but several at a time: pages
+- a B-tree node is usually as large as a whole disk page, and the size limits the number of children a B-tree node can have
+- branching factors are usually 50~2000, depending on the size of a key relative to the size of page
+- B-tree properities
+    - internal node: N nodecreasing keys, N + 1 children
+    - leaf node: no keys, no children
+    - keys separate the ranges of keys stored in each substree
+    - all leaves same depth -> B-tree height
+    - minimun degree t
+        - every node have at least t - 1 keys and t children
+        - every node have at most 2t - 1 keys and 2t chidren
+        - B-tree requires half-full
+        - simplest B-tree: t = 2, every internal node have either 2, 3, or 4 children, called 2-3-4 tree
 
 
 # VI Graph Algorithms

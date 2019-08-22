@@ -823,23 +823,149 @@ Matrix<T> matrix_multiply(Matrix<T>& A, Matrix<T>& B) {
     - undiscovered
 
 ### depth-first search
+- the archetype for many important graph algorithms
+    - Prim's minimun-spanning-tree algorithm
+    - Dijkstra's single-source shortest-paths algorithm
+- results
+    - the distance from source vertex to another vertex
+    - breadth-first tree with root source vertex containing all reachable vertices
 - backtrack
-- predecessor subgraphs
+- vertex colors: white, gray, black
+    - white: undiscovered vertices
+    - gray: the frontier between discovered and undiscovered vertices
+    - black: discovered vertices
+```c
+// time complexity: O(V + E)
+// scan and enqueue/dequeue each vertex once: O(V)
+// scan the adjacency list of each vertex once: O(E)
+BFS(G, s)
+    for each vertex u in G.V - {s}
+        u.color = WHITE
+        u.distance = -1
+        u.predecessor = NIL
+    s.color = GRAY
+    s.distance = 0
+    s.predecessor = NIL
+    Queue Q
+    Enqueue(Q, s)
+    while Q != 0
+        u = Dequeue(Q)
+        for each v in G.Adj[u]
+            if v.color == WHITE
+                v.color = GRAY
+                v.distance = u.distance + 1
+                v.predecessor = u
+                ENQUEUE(Q, v)
+        u.color = BLACK
+```
+#### shortest path
+- shortest-path distance: δ(s, v)
+- G = (V, E), vertex s in V, edge (u, v) in E ==> δ(s, v) <= δ(s, u) + 1
+
+#### breadth-first tree
+- predecessor subgraph $G_\pi = (V_\pi, E_\pi)$
+- $ |E_\pi| = |V_\pi| - 1$
+
+### depth-first search
+- predecessor subgraph
+- depth-first forest, depth-first tree
 - vertex states
-    - discovered
-    - finished(backtrack, adjacency list has been examined completely)
-    - undiscovered
+    - white: undiscovered
+    - gray: discovered
+    - black: finished, its adjacency list has been examined completely
 - timestamp(each vertex has two timestamps)
-    - first discovered
-    - finish and backtrack
+    - first discovered: white -> gray
+    - finish and backtrack: gray -> black
+```c
+// Θ(E + V)
+DFS(G)
+    for each vertex u in G.V
+        u.color = WHITE
+        u.π = NIL   // predecessor
+    time = 0
+    for each vertex u in G.V
+        if u.color == WHITE
+            DFS-Viset(G, u)
+
+DFS-Visit(G, u)
+    time = time + 1
+    u.d = time  // discovery time
+    u.color = GRAY
+    for each v in G.Adj[u]
+        if v.color == WHITE
+            v.π = u
+            DFS-Visit(G, v)
+    u.color = BLACK
+    time = time + 1 
+    u.f = time  // finishing time
+```
+- properties of depth-first tree
+    - valuable information about the structrue of a graph
+    - predecessor subgraph
+    - discovery and finishing times have parenthesis structure
+        - discover vertex u: (u
+        - finish vertex u : u)
+        - parenthesis expression
+- parenthesis theorem
+    - intervals [u.d, u.f] and [v.d, v.f] are entirely disjoint, and neither u nor v is a descendant of the other in the depth-first tree
+    - interval [u.d, u.f] is contained entirely within interval [v.d, v.f], and u is a descendant of v in a depth-first tree, vice versa
+- nesting of descendants' intervals
+    - vertex v is a proper descendant of vertex u in the depth-first forest for a (directed and undirected) graph G if and only if u.d < v.d < v.f < u.f
+- white-path theorem
+    - in a depth-first forest of a (directed or undirected) graph G, vertex v is a descendant of vertex u if and only if a the time u.d that search discovers u, there is a path from u to v consisting entirely of white vertices
+- classification of edges
+    - tree edges
+    - back edges
+    - forward edges
+    - corss edges
+
 
 ### topological sort
 - directed acyclic G = (V, E)
-- topological sort: linear ordering of all vertices such that if G containes an edge (u, v), then u apprears before v in the ordering 
+- dag: directed acyclic graph
+- topological sort of a dag G = (V, E): linear ordering of all vertices such that if G containes an edge (u, v), then u apprears before v in the ordering 
+```c
+TOPOLOGICAL-SORT(G)
+    call DFS(G) to compute finishing times v.f for each vertex v
+    as each vertex is finished, insert it onto to front of a linked list
+    return the linked list of vertices
+```
+- a directed graph G is acyclic if and only if a depth-first search of G yields no back edges
 
 ### strongly connected components
+- the transpose of G = (V, E): $ G^T = (V, E^T), where \ E^T = \{ (u, v):(v, u) \in E \} $
+- $G$ and $G^T$ have the same strongly connected components
+```c
+STRONGLY-CONNECTED-COMPENENTS(G)
+    call DFS(G) to compute finishing times u.f for each vertex u
+    compute G^T
+    call DFS(G^T), but in the main loop of DFS, consider the vertices
+        in order of descreasing u.f
+    output the vertices of each tree in the depth-first forest 
+        as a separate string connected component
+```
 
 ## 23 Minimun Spanning Trees
+- minimun-spanning-tree problem
+    - connected, undirected graph G = (V, E)
+    - each edge (u, v) has a weight w(u, v)
+    - spanning tree: acyclic subset $T = (V, E^T)$
+    - total weight $ w = \sum \limits_{(u, v) \in T} w(u, v)  $
+- greedy algorithms to slove minimum-spanning-tree problem
+    - Kruskal's algorithm: O(ElgV)
+    - Prim's algorithm: O(E + VlgV)
+        - using Fibonacci heaps
+        - better when |V| is much smaller than |E|
+
+#### growing a minimun spanning tree
+
+#### the algorithms of Kruskal and Prim
+
+### 24 Single-Source Shortest Paths
+
+### 25 All-Pairs Shortest Paths
+
+### 26 Maximun Flow
 
 # VII Seleted Topics
 

@@ -32,7 +32,8 @@
 ### LSD string sort
 
 ## 5.3 Substring Search
-- given a text string of length N and a pattern string of length M, find an occurence of the pattern within the text
+- substring search: given a text string of length N and a pattern string of length M, find an occurence of the pattern within the text
+
 
 ### A short history
 - brute-force algorithm
@@ -41,14 +42,32 @@
 - M.O.Rabin and R.M.Karp hashing algorithm
 
 ### Brute-force substring search
+- two layers of iteration
 
 ### Knuth-Morris-Pratt substring search
-
-### DFA simulation
+- basic idea: whenever we detect a mismatch, wo already know some of the characters in the text (since we matched the pattern characters prior to the mismatch)
+- DFA simulation
 
 ### Boyer-Moore substring search
+- rigth-to-left pattern scanning
+- mismatched character heuristic
+- jump to match current character when mismatch occurs
 
 ### Rabin-Karp fingerprint search
+- based on hashing
+- compute hash functions for M-character substrings in constant time
+- string of length M ==> M-digit base-R number
+- modular hashing
+    - random prime Q, as large as possible while avoiding overflow
+    - number % Q ==> [0, Q - 1]
+- key idea: efficiently computing hash for position i + 1 in the text, based on the hash for position i
+$$
+text: (t_1t_2...t_n)_{R} \\
+x_i = t_iR^{M-1} + t_{i+1}R^{M-2} + ... + t_{i+M-1}R^0 \\
+\Rightarrow x_{i+1} - Rx_i= t_{i+M} - t_iR^M \\
+\Rightarrow x_{i+1} = (x_i - t_iR^{M-1})R + t_{i+M} \\
+\Rightarrow x_{i+1} \mod Q = ((x_i + Q -  t_i R^{M-1} \mod Q)R + t_{i+M}) \mod Q
+$$
 
 ## 5.4 Regular Expression
 - partial-substring-searching problems

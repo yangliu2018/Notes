@@ -81,30 +81,6 @@ mstsc(Microsoft Terminal Services Client)
     - 静态成员函数式限制使用类或对象访问的普通全局函数
 
 
-- 进程间通信的方式
-    - 管道 (pipe)
-    - 高级管道 (popen)
-    - 有名管道 (named pipe)
-    - 信号量 (semophore)
-    - 消息队列 (message queue)
-    - 信号 (signal)
-    - 共享内存 (shared memory)
-    - 套接字 (socket)
-- 线程间通信的方式
-    - 全局变量
-    - 参数传递
-    - 消息传递
-- 线程间的同步和互斥
-    - 临界区
-    - 互斥量
-    - 信号量
-    - 事件
-- linux进程间通信原语
-    - sleep/wakeup
-    - send/receive: message passing
-- mutex is binary semaphore
-- mutex
-
 
 
 - 两个类互相依赖

@@ -1,0 +1,98 @@
+## opencv algorithms
+- 图像加法/减法
+- 图像混合：有权重的加法 addWeighted()
+
+# OpenCV中的图像处理
+- 颜色空间变换 cv2Color() inRange()
+    - 转换颜色空间
+    - 物体跟踪：在HSV颜色空间中提取特定颜色的物体
+- 几何变换 getPerspectiveTransform()
+    - 扩展缩放 resize()
+    - 平移：warpAffine(), 平移矩阵
+    - 旋转：warpAffine(), getRotationMatrix2D(), 旋转矩阵
+    - 仿射变换: warpAffine(), getAffineTransform()
+    - 透视变换: warpPerspective(), getPerspectiveTransform()
+- 图像阈值 threshold(), adaptiveThreshold()
+    - 简单阈值
+    - 自适应阈值（非全局阈值）
+    - Otsu
+- 图像平滑/图像模糊/低通滤波
+    - 2D卷积：filter2D()，卷积核
+    - 平均: blur(), boxFilter()
+    - 高斯模糊: GaussianBlur(), getGaussianKernel()
+    - 中值模糊: medianBlur(), 去除椒盐噪声
+    - 双边滤波：bilateraFilter(), 保持边界清晰的情况下去除噪声
+        - 空间高斯权重：只有临近区域像素对中心点有影响
+        - 灰度值相似性高斯权重：只有与中心像素灰度相近的才用于模糊运算
+- 形态学变换 morphologyEx()
+    - 腐蚀：腐蚀前景边界，去除白噪声, erode()
+    - 膨胀：增加前景边界，dilate()
+    - 开操作：先腐蚀后膨胀，去除噪声且保持物体不变
+    - 闭操作：先膨胀后腐蚀，填充前景物体中的小洞
+    - 形态学梯度：膨胀减腐蚀，前景物体的轮廓
+    - 礼帽：原始图像减开运算图像
+    - 黑帽：闭运算图像减原始图像
+    - 结构化元素：getStructuringElement()
+- 图像梯度/图像求导/高通滤波/边缘检测
+    - Sobel算子：一阶或二阶导数，方向性，高斯平滑+微分，抗噪声能力好
+    - Scharr算子：小卷积核求解梯度角度时Sobel算子的优化
+    - Laplacian算子：二阶导数
+- Canny边缘检测 Canny()
+    - 步骤
+        - 噪声去除：5*5高斯滤波器
+        - 计算图像梯度：Sobel算子计算水平和竖直方向一阶导数
+        - 非极大值抑制：获得梯度的大小和方向后，扫描整张图像，去除非边界点（找局部同方向最大梯度的点）
+        - 滞后阈值：用2个阈值判断真正的边界
+- 图像金字塔
+    - 同一图像的不同分辨率的子图集合
+    - 高斯金字塔：去除图像中连续的行和列，上层图像中的每个像素等于下层图像中5个像素的高斯加权平均，pyrUp(), pyrDown()
+    - 拉普拉斯金字塔，L = G - PyrUp(G)，边界图，常用于图像压缩
+    - 从金字塔重建原始图像
+    - 使用金字塔进行图像融合（分解金字塔，每层融合，重建图像）
+- 轮廓 findContours(), drawContours()
+    - 轮廓：连续的具有相同颜色或灰度的点连在一起的曲线，用于形状分析，物体的检测和识别
+    - 寻找轮廓前应进行二值化处理或Canny边界检测
+    - 轮廓的特征
+        - 矩：图像的矩可以计算图像的质心、面积等，moments()
+        - 轮廓面积：contourArea()或0阶矩M['m00']
+        - 轮廓周长：arcLength()
+        - 轮廓近似：将轮廓近似到另一种更少点组成的轮廓，Douglas-Peucker算法，approxPolyDP()
+        - 凸包：检测轮廓是否有凸性缺陷并纠正缺陷，convexHull()
+        - 凸性检测：检测曲线是不是凸的，isContourConvec()
+        - 边界矩形
+            - 直边界矩形：未旋转，boundingRect()
+            - 旋转的边界矩形：最小面积，minAreaRect(), boxPoints()
+        - 最小外接圆：minEnclosingCycle()
+        - 椭圆拟合/旋转边界矩形的内切椭圆：fitEllipse(), ellipse()
+        - 直线拟合：fitLine()
+    - 轮廓的性质
+        - 长宽比：边界矩形的长宽比
+        - Extent: 轮廓面积与边界矩形面积之比
+        - Solidity: 轮廓面积与凸包面积之比
+        - Equivalent Diameter: 与轮廓面积相等的圆的直径
+        - 方向：对象的方向
+        - 掩模和像素点：绘制填充的轮廓，获取构成对象的所有像素点
+        - 最大值最小值及其位置：mask + minMaxLoc()
+        - 平均颜色和平均灰度：mask + mean()
+        - 极点：对象最上点，最下点，最左点，最右点
+    - More
+        - 找凸缺陷：convexityDefect()
+        - 点到对象轮廓的最短距离/关系：pointPolygonTest()
+        - 形状匹配：匹配形状或轮廓的相似度，matchShapes()，基于Hu矩（对旋转、缩放、镜像映射等具有不变性）
+    - 轮廓的层次结构
+        - 父轮廓，子轮廓，外轮廓，内轮廓
+        - 轮廓检索模式
+            - RETR_LIST: 所有轮廓平等，不创建父子关系
+            - RETR_EXTERNAL: 返回最外的轮廓，忽略所有子轮廓
+            - RETR_CCOMP: 以两级组织形式返回所有轮廓
+            - RETR_TREE: 返回所有轮廓，创建完整组织结构列表
+- 直方图
+    - 统计直方图：calcHist()
+    - 直方图均衡化：横向拉升直方图，扩大像素分布范围，改善图像对比度，使图像达到相同亮度，equalizeHist()
+    - CLAHE有限对比适应性直方图均衡化, createCLAHE().apply()
+        - 图像分块
+        - 对比度限制，去除噪声干扰
+        - 自适应直方图均衡化
+        - 双线性插值，缝合小块，去除小块之间的算法造成的边界
+    - 2D直方图
+

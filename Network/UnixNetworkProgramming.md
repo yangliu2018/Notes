@@ -1,6 +1,4 @@
-
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
+@[TOC]
 
 # UNIX 网络编程
 ## 卷1：套接字联网API

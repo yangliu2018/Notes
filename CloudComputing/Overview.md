@@ -1,0 +1,24 @@
+# Cloud Computing
+
+- cloud computing
+  - a computing paradigm
+  - fundamental principal: reusability of IT capabilities
+  - a subscription-based service providing networked storage space and computer resources
+- traditional concepts
+  - grid computing
+  - distributed computing
+  - utility computing
+  - autonomic computing
+- cloud computing models
+  - Software as a Service (SaaS)
+  - Platform as a Service (PaaS)
+  - Infrastructure as a Service (IaaS)
+- cloud computing benefits
+  - reduced cost
+  - increased storage
+  - flexibility
+- cloud computing challenges
+  - data protection
+  - data recovery and availability
+  - management capabilities
+  - regulatory and compliance restrictions

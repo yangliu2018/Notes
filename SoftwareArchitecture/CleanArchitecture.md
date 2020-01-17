@@ -288,7 +288,17 @@
 # PART V Architecture
 ## Chapter 15 What Is Architecture?
 ## Chapter 16 Independence
+### decoupling modes
+- source code (compilation/module) level
+- binary code (deployment/component) level
+- execution unit (service) level
+
 ## Chapter 17 Boundaries: Drawing Lines
+- software architecture is the art of drawing lines called boundaries
+
+### plugin architecture
+
+
 ## Chapter 18 Boundary Anatomy
 ## Chapter 19 Policy and Level
 ## Chapter 20 Business Rules

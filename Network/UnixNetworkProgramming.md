@@ -55,3 +55,6 @@ struct in_addr {
 - 首次调用sendto时，udp socket若没有绑定本地端口，则内核分配临时端口
 - recvfrom的入参sockaddr\*和socklen_t*可以均为nullptr
 - 防止数据报丢失是recvfrom永久阻塞：为recvfrom设置超时
+
+
+# 20 广播

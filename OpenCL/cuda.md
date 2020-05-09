@@ -1,0 +1,26 @@
+# CUDA编程
+
+- GPU是CPU的协处理器
+- GPU并行计算 = CPU + GPU异构计算架构
+  - GPU与CPU通过PCIe总线协同工作
+  - CPU是主机端 (host)，处于主导地位
+  - GPU是设备端 (device)
+  - GPU有很多并行化的轻量线程
+- GPU比CPU包含更多的计算核心，适合数据并行的计算密集型任务
+- CPU运算核心少，但可实现复杂的逻辑运算，适合控制密集型任务
+- CPU负责处理逻辑负责的串行程序，GPU负责处理数据密集型的并行计算
+- CUDA编程模型
+  - CUDA程序 = host程序 + device程序
+  - 调用CUDA的核函数来执行并行计算
+  - kernel-grid-block
+- 内存
+  - thread/CUDA core: local memory
+  - thread block/SM: shared memory
+  - grid/device/GPU: global memory <-> host memory
+- 同步性与屏障
+  - 不同线程在共享和全局内存中读写数据需要控制先后顺序
+  - 屏障：控制多个线程的停止和等待，所有线程得到屏障点后程序才继续运行
+  - 线程块之间需要编程者完成同步
+  - kernel之间系统自动做先后顺序
+- 比较好的GPU有16个流处理器
+  - 
